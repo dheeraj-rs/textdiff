@@ -10,10 +10,10 @@ const Card = React.forwardRef<
     className={cn(
       'rounded-lg border bg-card text-card-foreground shadow-2xl relative overflow-hidden group',
       'transition-all duration-300 hover:shadow-3xl',
-      'before:absolute before:inset-0 before:bg-gradient-to-r before:from-purple-600/20 before:to-pink-600/20 before:opacity-0 before:transition-opacity before:duration-500',
-      'hover:before:opacity-100',
-      'after:absolute after:inset-0 after:bg-gradient-to-r after:from-purple-600/10 after:to-pink-600/10 after:opacity-0 after:transition-opacity after:duration-500',
-      'hover:after:opacity-100',
+      // 'before:absolute before:inset-0 before:bg-gradient-to-r before:from-purple-600/20 before:to-pink-600/20 before:opacity-0 before:transition-opacity before:duration-500',
+      // 'hover:before:opacity-100',
+      // 'after:absolute after:inset-0 after:bg-gradient-to-r after:from-purple-600/10 after:to-pink-600/10 after:opacity-0 after:transition-opacity after:duration-500',
+      // 'hover:after:opacity-100',
       className
     )}
     {...props}

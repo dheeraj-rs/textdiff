@@ -1,15 +1,68 @@
-import { ComparisonResult } from "@/types/comparison";
+import { ComparisonResult } from "@/types";
+
 
 /**
- * Formats a JSON string with proper indentation.
- * If the input is not valid JSON, it returns the original string.
+ * Formats the input text based on the specified type.
  */
-export const formatJSON = (jsonString: string): string => {
+export const formatText = (text: string, type: string): string => {
   try {
-    const parsed = JSON.parse(jsonString);
-    return JSON.stringify(parsed, null, 2);
+    // Helper function for HTML formatting
+    const formatHtml = (input: string): string => {
+      return input
+        .replace(/>\s+</g, ">\n<")
+        .replace(/(<[^>]+>)/g, (match) => `\n${match}\n`)
+        .split("\n")
+        .filter(Boolean)
+        .map(line => line.trim())
+        .join("\n");
+    };
+    // Helper function for SQL formatting
+    const formatSql = (input: string): string => {
+      const keywords = ['SELECT', 'FROM', 'WHERE', 'AND', 'OR', 'ORDER BY', 'GROUP BY', 'HAVING', 'JOIN', 'LEFT JOIN', 'RIGHT JOIN'];
+      let formatted = input.replace(/\s+/g, ' ').trim();
+      keywords.forEach(keyword => {
+        const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
+        formatted = formatted.replace(regex, `\n${keyword}`);
+      });
+      return formatted
+        .replace(/,/g, ',\n')
+        .split('\n')
+        .map(line => line.trim())
+        .join('\n');
+    };
+    // Main format switch
+    switch (type) {
+      case "html":
+        return formatHtml(text);
+        
+      case "sql":
+        return formatSql(text);
+        
+      case "json":
+        return JSON.stringify(JSON.parse(text), null, 2);
+        
+      case "auto":
+        // Try JSON first
+        try {
+          return JSON.stringify(JSON.parse(text), null, 2);
+        } catch {
+          // Check for HTML
+          if (text.trim().startsWith('<')) {
+            return formatHtml(text);
+          }
+          // Check for SQL
+          if (text.toUpperCase().includes('SELECT') || text.toUpperCase().includes('FROM')) {
+            return formatSql(text);
+          }
+          return text;
+        }
+        
+      default:
+        return text;
+    }
   } catch {
-    return jsonString;
+    console.warn("Formatting failed for type " + type + ", returning original text");
+    return text;
   }
 };
 
@@ -224,3 +277,5 @@ export const compareLines = (leftLines: string[], rightLines: string[]): Compari
 
   return result;
 };
+
+

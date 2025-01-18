@@ -1,15 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight, Check } from 'lucide-react';
-import { ComparisonLine as ComparisonLineType } from '../types/comparison';
-
-interface ComparisonLineProps {
-  line: ComparisonLineType;
-  index: number;
-  onLineClick: () => void;
-  onTextSelect: () => void;
-  isCopied: boolean;
-}
+import { ComparisonLineProps } from '@/types';
 
 export const ComparisonLine: React.FC<ComparisonLineProps> = ({
   line,
@@ -32,14 +24,12 @@ export const ComparisonLine: React.FC<ComparisonLineProps> = ({
     const timeDiff = mouseUpTime - mouseDownTime.current;
 
     if (selection && selection.toString().trim() && timeDiff > 200) {
-      // User has selected text
       isSelecting.current = true;
       const selectedText = selection.toString().trim();
       setSelectedText(selectedText);
       
       try {
         await navigator.clipboard.writeText(selectedText);
-        // Show copy feedback for selected text
         setTimeout(() => {
           setSelectedText('');
           selection.removeAllRanges();
@@ -48,41 +38,40 @@ export const ComparisonLine: React.FC<ComparisonLineProps> = ({
         console.error('Failed to copy selection:', err);
       }
     } else if (!isSelecting.current && line.type !== "matched") {
-      // User clicked the line without selecting text
       onLineClick();
     }
   };
 
-  const getTypeProps = (type: ComparisonLineType['type']) => {
+  const getTypeProps = (type: ComparisonLineProps['line']['type']) => {
     switch (type) {
       case 'missing':
         return {
           className: "bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500",
-          label: "Removed line",
-          tooltipColor: "bg-red-800"
+          label: "// Removed line",
+          textColor: "text-red-600 dark:text-red-400"
         };
       case 'extra':
         return {
           className: "bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500",
-          label: "Added line",
-          tooltipColor: "bg-green-800"
+          label: "// Added line",
+          textColor: "text-green-600 dark:text-green-400"
         };
       case 'different':
         return {
           className: "bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500",
-          label: "Modified line",
-          tooltipColor: "bg-yellow-800"
+          label: "// Modified line",
+          textColor: "text-yellow-600 dark:text-yellow-400"
         };
       default:
         return {
           className: "hover:bg-gray-50 dark:hover:bg-gray-800/50",
           label: "",
-          tooltipColor: ""
+          textColor: ""
         };
     }
   };
 
-  const { className: typeClass, label, tooltipColor } = getTypeProps(line.type);
+  const { className: typeClass, label, textColor } = getTypeProps(line.type);
 
   return (
     <motion.div
@@ -110,19 +99,6 @@ export const ComparisonLine: React.FC<ComparisonLineProps> = ({
 
       {/* Content */}
       <div className="flex-1 relative select-text">
-        {/* Tooltip for line type */}
-        {label && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className={`absolute invisible group-hover:visible -top-8 left-12 ${tooltipColor} text-white px-2 py-1 rounded text-xs whitespace-nowrap shadow-lg z-10`}
-          >
-            {label}
-            <div className={`absolute -bottom-1 left-4 w-2 h-2 ${tooltipColor} transform rotate-45`} />
-          </motion.div>
-        )}
-
         {/* Copy Feedback */}
         {(isCopied || selectedText) && line.type !== "matched" && (
           <motion.div
@@ -138,15 +114,24 @@ export const ComparisonLine: React.FC<ComparisonLineProps> = ({
           </motion.div>
         )}
 
-        {/* Line Content */}
-        <div className={`${line.type !== "matched" ? "hover:bg-opacity-75" : ""}`}>
-          {line.isHtml ? (
-            <div dangerouslySetInnerHTML={{ __html: line.text }} />
-          ) : (
-            line.text
+        {/* Line Content and Type Indicator */}
+        <div className="flex items-center justify-between gap-4">
+          <div className={`${line.type !== "matched" ? "hover:bg-opacity-75" : ""}`}>
+            {line.isHtml ? (
+              <div dangerouslySetInnerHTML={{ __html: line.text }} />
+            ) : (
+              line.text
+            )}
+          </div>
+          {label && (
+            <span className={`text-xs ${textColor} flex-shrink-0`}>
+              {label}
+            </span>
           )}
         </div>
       </div>
     </motion.div>
   );
 };
+
+export default ComparisonLine;

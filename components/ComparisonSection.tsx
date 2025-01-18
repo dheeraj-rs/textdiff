@@ -1,22 +1,15 @@
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Card, CardContent } from "./card";
-import { ComparisonLine as ComparisonLineType } from "../types/comparison";
 import { ComparisonLine } from "./ComparisonLine";
-import { Filter } from "lucide-react";
-import { Switch } from "./Switch";
-
-interface ComparisonSectionProps {
-  title: string;
-  lines: ComparisonLineType[];
-}
+import { ComparisonLineType, ComparisonSectionProps } from "@/types";
 
 export const ComparisonSection: React.FC<ComparisonSectionProps> = ({
   title,
   lines,
+  showOnlyChanges = false,
 }) => {
   const [copiedText, setCopiedText] = useState<string | null>(null);
-  const [showOnlyChanges, setShowOnlyChanges] = useState(false);
   
   // Filter lines but keep original indices
   const displayedLines = showOnlyChanges 
@@ -57,7 +50,7 @@ export const ComparisonSection: React.FC<ComparisonSectionProps> = ({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       {/* Header with Title and Filter Toggle */}
       <div className="flex justify-between items-center">
         <motion.h3
@@ -67,17 +60,6 @@ export const ComparisonSection: React.FC<ComparisonSectionProps> = ({
         >
           {title}
         </motion.h3>
-        
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2">
-            <Filter className="w-4 h-4 text-gray-500" />
-            <span className="text-sm text-gray-600">Show Changes Only</span>
-            <Switch
-              checked={showOnlyChanges}
-              onCheckedChange={setShowOnlyChanges}
-            />
-          </div>
-        </div>
       </div>
 
       {/* Content */}

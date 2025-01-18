@@ -2,16 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Textarea } from "./textarea";
 import { ClipboardPaste, Trash2 } from "lucide-react";
-
-interface TextareaWithLabelProps {
-  label: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  className?: string;
-  placeholder?: string;
-  onPaste?: () => void;
-  onClear?: () => void;
-}
+import { TextareaWithLabelProps } from "@/types";
 
 export const TextareaWithLabel: React.FC<TextareaWithLabelProps> = ({
   label,
@@ -41,8 +32,8 @@ export const TextareaWithLabel: React.FC<TextareaWithLabelProps> = ({
           onClick={onClear}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="px-4 py-2 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-lg shadow-md hover:shadow-lg transition-all flex items-center space-x-2"
-        >
+          className="text-sm text-gray-600 flex items-center space-x-1 border border-transparent hover:border-gray-300 dark:hover:border-gray-700 rounded-md px-2 py-1 transition-colors"
+          >
           <Trash2 className="w-4 h-4" />
           <span className="font-medium">Clear</span>
         </motion.button>
@@ -52,8 +43,8 @@ export const TextareaWithLabel: React.FC<TextareaWithLabelProps> = ({
           onClick={onPaste}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg shadow-md hover:shadow-lg transition-all flex items-center space-x-2"
-        >
+          className="text-sm text-gray-600 flex items-center space-x-1 border border-transparent hover:border-gray-300 dark:hover:border-gray-700 rounded-md px-2 py-1 transition-colors"
+          >
           <ClipboardPaste className="w-4 h-4" />
           <span className="font-medium">Paste</span>
         </motion.button>
@@ -61,10 +52,8 @@ export const TextareaWithLabel: React.FC<TextareaWithLabelProps> = ({
     </div>
 
     {/* Textarea Container */}
-    <div className="relative flex-1 min-h-[40vh] md:min-h-[60vh] group">
-      {/* Gradient Border Effect */}
+    <div className="relative flex-1 min-h-[50vh] h-full group">
       <div className="absolute -inset-[1px] bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg opacity-30 group-hover:opacity-50 transition-opacity blur-sm" />
-      
       <Textarea
         value={value}
         onChange={onChange}

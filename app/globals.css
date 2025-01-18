@@ -207,7 +207,7 @@
 
 /* Back Button */
 .back-button {
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   padding: 10px 20px;
   background-color: #4caf50;
   color: white;
