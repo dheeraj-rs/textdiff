@@ -36,6 +36,18 @@ const TextComparison: React.FC = () => {
     setShowComparison(false); // Show textarea sections
   };
 
+  // Handle Paste
+  const handlePaste = (setText: React.Dispatch<React.SetStateAction<string>>) => {
+    navigator.clipboard.readText().then((text) => {
+      setText(text);
+    });
+  };
+
+  // Handle Clear
+  const handleClear = (setText: React.Dispatch<React.SetStateAction<string>>) => {
+    setText("");
+  };
+
   return (
     <div className="w-full mx-auto p-8 space-y-8">
       {/* Header Section (Only shown when !showComparison) */}
@@ -75,11 +87,15 @@ const TextComparison: React.FC = () => {
                 label="Original Text"
                 value={leftText}
                 onChange={(e) => setLeftText(e.target.value)}
+                onPaste={() => handlePaste(setLeftText)}
+                onClear={() => handleClear(setLeftText)} // Add Clear Button
               />
               <TextareaWithLabel
                 label="Modified Text"
                 value={rightText}
                 onChange={(e) => setRightText(e.target.value)}
+                onPaste={() => handlePaste(setRightText)}
+                onClear={() => handleClear(setRightText)} // Add Clear Button
               />
             </div>
             <div className="flex justify-center">
