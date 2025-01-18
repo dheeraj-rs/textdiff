@@ -81,3 +81,217 @@
   }
 }
 
+/* Animations */
+@keyframes highlight-addition {
+  0% {
+    background-color: rgba(34, 197, 94, 0.1);
+    transform: translateY(-2px);
+  }
+  50% {
+    background-color: rgba(34, 197, 94, 0.3);
+    transform: translateY(0);
+  }
+  100% {
+    background-color: rgba(34, 197, 94, 0.1);
+    transform: translateY(0);
+  }
+}
+
+@keyframes highlight-deletion {
+  0% {
+    background-color: rgba(239, 68, 68, 0.1);
+    transform: translateY(-2px);
+  }
+  50% {
+    background-color: rgba(239, 68, 68, 0.3);
+    transform: translateY(0);
+  }
+  100% {
+    background-color: rgba(239, 68, 68, 0.1);
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in {
+  0% {
+    transform: translateX(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-once {
+  0% {
+    background-color: transparent;
+    transform: scale(1);
+  }
+  50% {
+    background-color: rgba(234, 179, 8, 0.1);
+    transform: scale(1.001);
+  }
+  100% {
+    background-color: transparent;
+    transform: scale(1);
+  }
+}
+
+@keyframes letter-highlight {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Utility Classes */
+.animate-highlight-addition {
+  animation: highlight-addition 1s ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+.animate-highlight-deletion {
+  animation: highlight-deletion 1s ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+  animation-fill-mode: forwards;
+}
+
+.animate-pulse-once {
+  animation: pulse-once 1s ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+.bg-red-200,
+.bg-green-200 {
+  animation: letter-highlight 0.5s ease-out;
+  animation-fill-mode: forwards;
+  border-radius: 2px;
+  padding: 0 1px;
+  margin: 0 -1px;
+}
+
+/* Input Section */
+.input-section {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.input-section.hide {
+  opacity: 0;
+  transform: translateY(-20px) scale(0.95);
+}
+
+/* Comparison Section */
+.comparison-section {
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.comparison-section.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Back Button */
+.back-button {
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #45a049;
+}
+
+/* Highlight Colors */
+.bg-red-200 {
+  background-color: rgba(239, 68, 68, 0.2);
+}
+
+.bg-green-200 {
+  background-color: rgba(34, 197, 94, 0.2);
+}
+
+.text-red-900 {
+  color: rgba(127, 29, 29, 1);
+}
+
+.text-green-900 {
+  color: rgba(20, 83, 45, 1);
+}
+
+/* Layout Adjustments */
+.comparison-container {
+  position: relative;
+}
+
+.comparison-container .back-button {
+  position: absolute;
+  top: -20px; /* Adjust based on your layout */
+  right: 0;
+}
+
+/* TextareaWithLabel Styles */
+.textarea-with-label {
+  @apply space-y-4;
+}
+
+.textarea-with-label h3 {
+  @apply text-lg font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent;
+}
+
+.textarea-with-label .textarea-container {
+  @apply relative h-[60vh]; /* Set height to 60% of viewport height */
+}
+
+.textarea-with-label .textarea-container .gradient-overlay {
+  @apply absolute -inset-0.5 bg-gradient-to-r from-pink-600 to-purple-600 rounded-lg blur opacity-30 transition duration-300;
+}
+
+.textarea-with-label .textarea-container:hover .gradient-overlay {
+  @apply opacity-50; /* Use :hover instead of group-hover */
+}
+
+.textarea-with-label textarea {
+  @apply relative w-full min-h-full font-mono bg-white/90 backdrop-blur-sm rounded-lg border-0 shadow-lg;
+}
+
+.textarea-with-label textarea::placeholder {
+  @apply text-gray-400;
+}
+
+/* Gradient Animation */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 5s ease infinite;
+}
