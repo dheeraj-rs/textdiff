@@ -21,6 +21,7 @@ export interface ComparisonLineType {
 
   export interface CompareButtonProps {
     onClick: () => void;
+    isDisabled: boolean;
   }
 
 

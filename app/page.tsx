@@ -93,92 +93,101 @@ const TextComparison: React.FC = () => {
   ]);
 
   return (
-    <div className="w-full mx-auto p-4 space-y-8">
-      {/* Header Section) */}
-      <AnimatePresence>
-        {!showComparison && (
-          <motion.header
-            key="header"
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
-            transition={{ duration: 0.5 }}
-            className="text-center"
-          >
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent animate-gradient">
-              Text Compare!
-            </h1>
-            <p className="mt-2 text-lg text-gray-600 dark:text-gray-400">
-              Compare and analyze text differences with ease.
-            </p>
-          </motion.header>
-        )}
-      </AnimatePresence>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="mx-auto p-4 sm:p-3 lg:p-6">
+        {/* Header Section) */}
+        <AnimatePresence>
+          {!showComparison && (
+            <motion.header
+              key="header"
+              initial={{ opacity: 0, y: -50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50 }}
+              transition={{ duration: 0.5 }}
+              className="text-center"
+            >
+              <motion.h1
+                className="text-3xl sm:text-4xl lg:text-5xl mb-8 sm:mb-12 font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent animate-gradient"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                Text Compare!
+              </motion.h1>
+            </motion.header>
+          )}
+        </AnimatePresence>
 
-      <AnimatePresence>
-        {!showComparison ? (
-          <motion.div
-            key="textareas"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="space-y-8"
-          >
-            <div className="grid grid-cols-2 gap-8">
-              <TextareaWithLabel
-                label="Original Text"
-                value={leftText}
-                onChange={(e) => setLeftText(e.target.value)}
-                onPaste={() => handlePaste(setLeftText)}
-                onClear={() => handleClear(setLeftText)}
-              />
-              <TextareaWithLabel
-                label="Modified Text"
-                value={rightText}
-                onChange={(e) => setRightText(e.target.value)}
-                onPaste={() => handlePaste(setRightText)}
-                onClear={() => handleClear(setRightText)}
-              />
-            </div>
-            <div className="flex justify-center">
-              <CompareButton onClick={compareTexts} />
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="comparison"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-          >
-            <ComparisonHeader
-              handleBack={handleBack}
-              setShowOnlyChanges={setShowOnlyChanges}
-              showOnlyChanges={showOnlyChanges}
-              formatType={formatType}
-              caseSensitive={caseSensitive}
-              trimWhitespace={trimWhitespace}
-              setFormatType={setFormatType}
-              setCaseSensitive={setCaseSensitive}
-              setTrimWhitespace={setTrimWhitespace}
-            />
-            <div className="grid grid-cols-2 gap-8">
-              <ComparisonSection
-                title="Original Version"
-                lines={comparison.left}
+        <AnimatePresence>
+
+          {!showComparison && (
+            <motion.div
+              key="textareas"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              className="space-y-8"
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <TextareaWithLabel
+                  label="Original Text"
+                  value={leftText}
+                  onChange={(e) => setLeftText(e.target.value)}
+                  onPaste={() => handlePaste(setLeftText)}
+                  onClear={() => handleClear(setLeftText)}
+                />
+                <TextareaWithLabel
+                  label="Modified Text"
+                  value={rightText}
+                  onChange={(e) => setRightText(e.target.value)}
+                  onPaste={() => handlePaste(setRightText)}
+                  onClear={() => handleClear(setRightText)}
+                />
+              </div>
+              <div className="flex justify-center">
+                <CompareButton
+                  onClick={compareTexts}
+                  isDisabled={!(leftText && rightText)}
+                />
+              </div>
+            </motion.div>
+          )}
+
+          {showComparison && (
+            <motion.div
+              key="comparison"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            >
+              <ComparisonHeader
+                handleBack={handleBack}
+                setShowOnlyChanges={setShowOnlyChanges}
                 showOnlyChanges={showOnlyChanges}
+                formatType={formatType}
+                caseSensitive={caseSensitive}
+                trimWhitespace={trimWhitespace}
+                setFormatType={setFormatType}
+                setCaseSensitive={setCaseSensitive}
+                setTrimWhitespace={setTrimWhitespace}
               />
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <ComparisonSection
-                title="Modified Version"
-                lines={comparison.right}
-                showOnlyChanges={showOnlyChanges}
-              />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                  title="Original Version"
+                  lines={comparison.left}
+                  showOnlyChanges={showOnlyChanges}
+                />
+                <ComparisonSection
+                  title="Modified Version"
+                  lines={comparison.right}
+                  showOnlyChanges={showOnlyChanges}
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 };

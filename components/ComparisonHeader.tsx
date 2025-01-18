@@ -14,10 +14,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/Select";
-import { ComparisonHeaderProps } from "@/types";
 
+interface ComparisonHeaderProps {
+  showOnlyChanges: boolean;
+  setShowOnlyChanges: (value: boolean) => void;
+  handleBack: () => void;
+  formatType?: string;
+  caseSensitive?: boolean;
+  trimWhitespace?: boolean;
+  setFormatType: (value: string) => void;
+  setCaseSensitive?: (value: boolean) => void;
+  setTrimWhitespace?: (value: boolean) => void;
+}
 
-export const ComparisonHeader: React.FC<ComparisonHeaderProps> = ({
+export const ComparisonHeader = ({
   showOnlyChanges,
   setShowOnlyChanges,
   handleBack,
@@ -27,80 +37,68 @@ export const ComparisonHeader: React.FC<ComparisonHeaderProps> = ({
   setFormatType,
   setCaseSensitive,
   setTrimWhitespace,
-}) => {
-  const getButtonClasses = (isActive: boolean) => {
+}: ComparisonHeaderProps) => {
+
+  const getButtonClasses = (isActive: boolean): string => {
     return `text-base ${
       isActive 
         ? "bg-purple-100 text-purple-700 border-purple-300 dark:bg-purple-900/30 dark:text-purple-400 dark:border-purple-800" 
         : "text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800"
-    } flex items-center gap-2 space-x-1 border rounded-md px-2 py-1 transition-all duration-200`;
+    } flex items-center gap-2 border rounded-md transition-all duration-200 
+    sm:px-2 sm:py-1 px-1.5 py-1`;
   };
 
   return (
     <motion.div
-      className="sticky top-0 py-1 flex items-center justify-end gap-5 z-50 dark:bg-gray-900/80 backdrop-blur-sm backdrop-saturate-150 rounded-b-xl"
+      className="sticky top-0 py-1 mb-2 flex flex-wrap items-center gap-2 sm:gap-5 z-50 dark:bg-gray-900/80 backdrop-blur-sm backdrop-saturate-150 rounded-b-xl"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
     >
-      <Select 
-        value={formatType} 
-        onValueChange={setFormatType}
-      >
-        <SelectTrigger className={`w-32 ${formatType !== 'none' ? 'border-purple-300 dark:border-purple-800' : ''}`}>
-          <Type className={`w-4 h-4 mr-2 ${formatType !== 'none' ? 'text-purple-600' : ''}`} />
-          <SelectValue placeholder="Format" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="auto">
-            <span className="flex items-center gap-2">
-              Auto
-            </span>
-          </SelectItem>
-          <SelectItem value="json">
-            <span className="flex items-center gap-2">
-              JSON
-            </span>
-          </SelectItem>
-          <SelectItem value="html">
-            <span className="flex items-center gap-2">
-              HTML
-            </span>
-          </SelectItem>
-          <SelectItem value="sql">
-            <span className="flex items-center gap-2">
-              SQL
-            </span>
-          </SelectItem>
-          <SelectItem value="none">
-            <span className="flex items-center gap-2">
-              Text
-            </span>
-          </SelectItem>
-        </SelectContent>
-      </Select>
+      <div className="flex items-center gap-2 order-1 sm:order-none">
+        <Select 
+          value={formatType} 
+          onValueChange={setFormatType}
+        >
+          <SelectTrigger className={`w-24 sm:w-32 ${formatType !== 'none' ? 'border-purple-300 dark:border-purple-800' : ''}`}>
+            <Type className={`w-4 h-4 ${formatType !== 'none' ? 'text-purple-600' : ''}`} />
+            <SelectValue placeholder="Format" className="hidden sm:block" />
+          </SelectTrigger>
+          <SelectContent>
+            {['auto', 'json', 'html', 'sql', 'none'].map((value) => (
+              <SelectItem key={value} value={value}>
+                <span className="flex items-center gap-2">
+                  {value.charAt(0).toUpperCase() + value.slice(1)}
+                </span>
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-      <button
-        onClick={() => setCaseSensitive?.(!caseSensitive)}
-        className={getButtonClasses(caseSensitive)}
-        title="Toggle case sensitivity"
-      >
-        <CaseSensitive className="w-4 h-4" />
-        Case Sensitive
-      </button>
+      <div className="flex items-center gap-2 order-2 sm:order-none">
+        <button
+          onClick={() => setCaseSensitive?.(!caseSensitive)}
+          className={getButtonClasses(caseSensitive)}
+          title="Toggle case sensitivity"
+        >
+          <CaseSensitive className="w-4 h-4" />
+          <span className="hidden sm:inline">Case Sensitive</span>
+        </button>
 
-      <button
-        onClick={() => setTrimWhitespace?.(!trimWhitespace)}
-        className={getButtonClasses(trimWhitespace)}
-        title="Toggle whitespace trimming"
-      >
-        <AlignHorizontalJustifyCenter className="w-4 h-4" />
-        Trim Whitespace
-      </button>
+        <button
+          onClick={() => setTrimWhitespace?.(!trimWhitespace)}
+          className={getButtonClasses(trimWhitespace)}
+          title="Toggle whitespace trimming"
+        >
+          <AlignHorizontalJustifyCenter className="w-4 h-4" />
+          <span className="hidden sm:inline">Trim Whitespace</span>
+        </button>
+      </div>
 
-      <div className="flex items-center space-x-8">
-        <div className="flex items-center space-x-2">
+      <div className="flex items-center gap-2 ml-auto order-3">
+        <div className="flex items-center gap-2">
           <Filter className={`w-4 h-4 ${showOnlyChanges ? 'text-purple-600' : 'text-gray-500'}`} />
-          <span className="text-sm text-gray-600">Show Changes Only</span>
+          <span className="hidden sm:inline text-sm text-gray-600">Show Changes Only</span>
           <Switch
             checked={showOnlyChanges}
             onCheckedChange={setShowOnlyChanges}
@@ -111,11 +109,14 @@ export const ComparisonHeader: React.FC<ComparisonHeaderProps> = ({
 
       <button
         onClick={handleBack}
-        className="text-base text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center space-x-1 border rounded-md px-2 py-1 transition-colors"
+        className="text-base text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center gap-2 border rounded-md px-2 py-1 transition-colors order-4"
+        title="Back to Textarea"
       >
         <ArrowBigLeft className="w-4 h-4" />
-        <span>Back to Textarea</span>
+        <span className="hidden sm:inline">Back to Textarea</span>
       </button>
     </motion.div>
   );
 };
+
+export default ComparisonHeader;

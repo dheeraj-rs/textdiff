@@ -1,17 +1,20 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Button } from './button';
 import { ArrowRight } from 'lucide-react';
 import { CompareButtonProps } from '@/types';
 
-export const CompareButton: React.FC<CompareButtonProps> = ({ onClick }) => (
+export const CompareButton: React.FC<CompareButtonProps> = ({ onClick,isDisabled }) => (
   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-    <Button
+    <motion.button
       onClick={onClick}
-      className="group px-36 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg"
-    >
+      className={`w-full sm:w-auto mx-auto px-8 lg:px-36 py-3 text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg shadow-lg flex items-center justify-center gap-2 transition-all duration-200 ${
+        isDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-xl hover:-translate-y-0.5 transform'
+      }`}
+      whileHover={isDisabled ? {} : { scale: 1.02 }}
+      whileTap={isDisabled ? {} : { scale: 0.98 }}
+      disabled={isDisabled}>
       <span className="flex items-center gap-2 text-white">
-        Compare
+      Compare Texts
         <motion.span
           animate={{ x: [0, 4, 0] }}
           transition={{ repeat: Infinity, duration: 1.5 }}
@@ -19,6 +22,6 @@ export const CompareButton: React.FC<CompareButtonProps> = ({ onClick }) => (
           <ArrowRight className="w-4 h-4" />
         </motion.span>
       </span>
-    </Button>
+    </motion.button>
   </motion.div>
 );
